@@ -1,0 +1,72 @@
+<template>
+    <lightning-card title="SA ID Checker">
+        <div class="slds-p-horizontal_small slds-text-align_left">
+            <p>
+                Enter your SA ID Number to check if your birthdate falls on a public holiday.
+            </p>
+            
+            <lightning-input
+            type="tel"
+            label="SA ID Number"
+            value={idNumber}
+            onchange={handleInput}
+            max-length="13"
+            pattern="^[0-9]{13}$"
+            message-when-pattern-mismatch="Invalid SA ID Number format. It must be 13 digits long and valid."
+            required>
+        </lightning-input>
+
+            <div class="slds-m-top_small">
+                <lightning-button
+                    label="Search"
+                    onclick={handleSearch}
+                    disabled={isButtonDisabled}
+                    class="slds-m-right_small">
+                </lightning-button>
+
+                <template if:true={showClearButton}>
+                    <lightning-button
+                        label="Clear"
+                        onclick={handleClear}
+                        disabled={isClearDisabled}
+                        variant="destructive">
+                    </lightning-button>
+                </template>
+            </div>
+
+            <template if:true={result}>
+                <div class="slds-m-top_medium">
+                    <p><strong>Date of Birth:</strong> {result.dob}</p>
+                    <p><strong>Gender:</strong> {result.gender}</p>
+                    <p><strong>SA Citizen:</strong> {result.citizen}</p>
+                    <p><strong>Public Holidays:</strong></p>
+
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Holiday Name">Holiday Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Date">Date</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={result.holidays} for:item="holiday">
+                                <tr key={holiday.name}>
+                                    <td>
+                                        <div class="slds-truncate" title={holiday.name}>{holiday.name}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title={holiday.date}>{holiday.date}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
